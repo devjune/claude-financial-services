@@ -18,8 +18,4 @@
 - 두 덩어리: **완성품(agent-plugins)** vs **부품(vertical-plugins)**. 가볍게 쓰려면 vertical만.
 - 4대 분야: 투자은행(IB) / 주식 리서치 / 사모펀드(PE) / 자산관리. FSI = Financial Services Industry.
 
-## 용어 메모
-
-- **Reference(레퍼런스)** = 완제품 아님. 보고 배우고 변형하는 본보기.
-- **Cowork** = 앤트로픽 데스크톱/웹 작업 앱. 사람이 직접 대화하며 일함.
-- **Managed Agents API** = 서버에서 자동으로 에이전트 돌리는 API. `/v1/agents`로 배포.
+> 용어 풀이는 [99-glossary.md](99-glossary.md)로 일원화.
