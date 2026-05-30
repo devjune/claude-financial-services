@@ -20,11 +20,13 @@
 2. **`pip install openpyxl`** 필요 (덱이면 `python-pptx`). 엑셀 출력이 순수 파이썬 → MS Office·네트워크 불필요.
 3. **실행 경로**: `deploy-managed-agent.sh`(API키+서버) 말고 **Claude Code 플러그인 설치**(`claude plugin install`)가 로컬 데모에 제일 간단. `recalc.py`/LibreOffice는 환경에 없음 → 재계산은 그냥 스프레드시트 앱에서 열어서 보여주면 됨.
 
-## 최종 추천
+## 최종 결정 (데모 3종 확정)
 
-- **① GL Reconciler (필수)** — CSV 2개(타이밍 break + FX break + 정상행)만 던지면 됨. `No ledger posting`("기표는 사람") 가드레일이 코드에 박혀 있어 **"AI는 초안만" 철학 데모 펀치라인**이 자동.
-- **② Model Builder = DCF만 (필수)** — 가정값 입력 → live-formula 엑셀. 결과물 임팩트 최고. LBO/3-stmt는 템플릿 없어서 제외.
-- **③ KYC Screener (선택)** — 룰 엔진 패턴 다양성용. 텍스트 파일 위조 + 스크리닝 not-run 처리. 노란불이지만 가능.
+- **① KYC Screener (확정)** — ★ 발표자가 카카오페이(한국 핀테크) 소속 → **자사 도메인과 직결**. "우리가 매일 하는 온보딩 심사가 이거다" 공감대가 최고. 룰 엔진 패턴. 텍스트 파일 몇 개 위조 + 스크리닝 단계는 not-run/mock 처리. (노란불이지만 도메인 적합성으로 채택)
+- **② GL Reconciler (확정)** — CSV 2개(타이밍 break + FX break + 정상행)만 던지면 됨. `No ledger posting`("기표는 사람") 가드레일이 코드에 박혀 있어 **"AI는 초안만" 철학 데모 펀치라인**이 자동.
+- **③ Model Builder = DCF만 (확정)** — 가정값 입력 → live-formula 엑셀. 결과물 임팩트 최고. LBO/3-stmt는 템플릿 없어서 제외.
+
+> 데모 순서 제안: KYC(도메인 공감) → GL(거버넌스/사람승인) → DCF(엑셀 결과물 임팩트). 단순→철학→임팩트 흐름.
 
 ## 데모 레시피 (확정 2종)
 
