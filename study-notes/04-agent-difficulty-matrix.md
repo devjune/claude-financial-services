@@ -2,7 +2,7 @@
 
 > 기준(중요): **인터넷 O(웹검색 가능)**. 블로커는 **유료 벤더 MCP**(capiq/factset/daloopa/pitchbook 등 구독 필요)뿐. 회사 자체 시스템 MCP(internal-gl/crm/portfolio/nav)는 "샘플 파일 위조하면 됨". openpyxl/python-pptx는 pip로 설치.
 >
-> 🟢 GREEN = 셋업 낮음, 웹/수동입력으로 작동 · 🟡 YELLOW = 되는데 파일 위조 필요 or 유료데이터 없으면 약해짐 · 🔴 RED = 유료/내부데이터 대량 없으면 무의미. 4개(pitch·earnings·meeting·valuation)는 서브에이전트 검증, KYC·GL·DCF는 실제 구동 검증 완료.
+> 🟢 GREEN = 셋업 낮음, 웹/수동입력으로 작동 · 🟡 YELLOW = 되는데 파일 위조 필요 or 유료데이터 없으면 약해짐 · 🔴 RED = 유료/내부데이터 대량 없으면 무의미. KYC·GL·DCF는 실제 구동 검증 완료(03 참고), Market Researcher는 산출물 셸만 구동(라이브는 미검증), pitch·earnings·meeting·valuation은 스킬 검증만.
 
 | # | 에이전트 | vertical | 등급 | 블로커 / 셋업 | 산출물 |
 |---|---|---|---|---|---|
@@ -19,7 +19,7 @@
 
 ## 핵심 관찰
 
-- **GREEN 3.5개**(Researcher·GL·DCF + KYC) — 데모는 이 안에서. KYC는 핀테크 도메인이라 ★.
+- **GREEN 4개**(Researcher·GL·DCF·KYC — KYC는 🟢~🟡 경계) — 데모는 이 안에서. KYC는 핀테크 도메인이라 ★.
 - **YELLOW 5개**의 공통점: "회사 자체 데이터를 샘플 파일로 위조"만 하면 됨. 유료 구독 필요는 아님.
 - **RED는 Month-End 하나** — 결산은 본질적으로 내부 GL 전체가 있어야 의미가 생김.
 - **공통 패턴**: 거의 모든 에이전트가 ① 데이터는 MCP/웹/수동 중 택1(fetch 단계 분리) ② 산출물은 openpyxl/python-pptx로 오프라인 ③ 마지막에 사람 승인으로 stop. → 데모 난이도는 결국 "데이터를 얼마나 쉽게 공급하나"로 갈림.

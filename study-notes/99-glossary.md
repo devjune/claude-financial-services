@@ -53,3 +53,4 @@
 - **Cowork** — 앤트로픽 데스크톱/웹 작업 앱. 사람이 직접 대화하며 일함.
 - **Managed Agents API** — 서버에서 자동으로 에이전트 돌리는 API. `/v1/agents`로 배포.
 - **FSI** — Financial Services Industry (금융 서비스 산업).
+- **[UNSOURCED]** — 유료 데이터(CapIQ/FactSet 등) 없이 출처를 못 댄 숫자에 에이전트가 다는 표식. 환각으로 지어내는 대신 정직하게 비워둠.

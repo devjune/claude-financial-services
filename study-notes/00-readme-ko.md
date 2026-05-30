@@ -110,7 +110,7 @@ scripts/deploy-managed-agent.sh gl-reconciler
 
 | 플러그인 | 추가되는 것 |
 |---|---|
-| **[financial-analysis](./plugins/vertical-plugins/financial-analysis)** *(코어)* | 컴스, DCF, LBO, 3-statement, 덱 QC, 엑셀 감사. 데이터 커넥터 11개 전부. |
+| **[financial-analysis](./plugins/vertical-plugins/financial-analysis)** *(코어)* | 컴스, DCF, LBO, 3-statement, 덱 QC, 엑셀 감사. 데이터 커넥터 12개 전부 (아래 MCP 표 참고 — 원문은 "11"이나 Box 추가로 실제 12개). |
 | **[investment-banking](./plugins/vertical-plugins/investment-banking)** | CIM, 티저, 프로세스 레터, 바이어 리스트, 합병 모델, 딜 트래킹. |
 | **[equity-research](./plugins/vertical-plugins/equity-research)** | 실적 노트, 커버리지 개시, 모델 업데이트, 논리(thesis)·촉매(catalyst) 추적. |
 | **[private-equity](./plugins/vertical-plugins/private-equity)** | 소싱, 스크리닝, 실사 체크리스트, IC 메모, 포트폴리오 모니터링. |
