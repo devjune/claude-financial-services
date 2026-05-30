@@ -1,28 +1,28 @@
-# README 번역본 (초안)
+# README 번역본
 
-> 원문: [README.md](../README.md) · 학습용 한국어 번역. 의역 포함. 용어는 금융 실무 표현 유지.
+> 원문: [README.md](../README.md) · 학습용 한국어 번역. 의역 포함. 평서체(~이다). 금융 용어는 실무 표현 유지.
 
 ---
 
 # 금융 서비스를 위한 Claude
 
-우리가 가장 자주 보는 금융 서비스 워크플로 — 투자은행(IB), 주식 리서치, 사모펀드(PE), 자산관리 — 를 위한 **레퍼런스 에이전트, 스킬, 데이터 커넥터** 모음입니다.
+우리가 가장 자주 보는 금융 서비스 워크플로 — 투자은행(IB), 주식 리서치, 사모펀드(PE), 자산관리 — 를 위한 **레퍼런스 에이전트, 스킬, 데이터 커넥터** 모음이다.
 
-여기 있는 모든 것은 **하나의 소스에서 두 가지 방식으로** 사용할 수 있습니다: [Claude Cowork](https://claude.com/product/cowork) 플러그인으로 설치하거나, 회사 자체 워크플로 엔진 뒤에서 [Claude Managed Agents API](https://docs.claude.com/en/api/managed-agents)로 배포하거나. 같은 시스템 프롬프트, 같은 스킬 — 어디서 돌릴지는 당신이 정합니다.
+여기 있는 모든 것은 **하나의 소스에서 두 가지 방식으로** 쓸 수 있다: [Claude Cowork](https://claude.com/product/cowork) 플러그인으로 설치하거나, 회사 자체 워크플로 엔진 뒤에서 [Claude Managed Agents API](https://docs.claude.com/en/api/managed-agents)로 배포하거나. 같은 시스템 프롬프트, 같은 스킬 — 어디서 돌릴지는 네가 정한다.
 
 > [!IMPORTANT]
-> 이 저장소의 어떤 것도 투자·법률·세무·회계 자문이 아닙니다. 이 에이전트들은 자격을 갖춘 전문가의 검토를 위한 **애널리스트 작업물 초안**(모델, 메모, 리서치 노트, 대사 자료)을 작성합니다. 투자 권유를 하거나, 거래를 실행하거나, 리스크를 확정하거나, 원장에 기표하거나, 온보딩을 승인하지 않습니다. 모든 산출물은 사람의 최종 승인을 위해 준비된 상태(staged)입니다. 산출물 검증과 회사에 적용되는 법규 준수의 책임은 당신에게 있습니다.
+> 이 저장소의 어떤 것도 투자·법률·세무·회계 자문이 아니다. 이 에이전트들은 자격을 갖춘 전문가의 검토를 위한 **애널리스트 작업물 초안**(모델, 메모, 리서치 노트, 대사 자료)을 작성할 뿐이다. 투자 권유를 하거나, 거래를 실행하거나, 리스크를 확정하거나, 원장에 기표하거나, 온보딩을 승인하지 않는다. 모든 산출물은 사람의 최종 승인을 위해 준비된 상태(staged)다. 산출물 검증과 회사에 적용되는 법규 준수의 책임은 너에게 있다.
 
 저장소에 담긴 것:
 
-- **[에이전트(Agents)](#에이전트)** — 이름이 붙은, 처음부터 끝까지(end-to-end) 워크플로를 수행하는 에이전트 (Pitch Agent, Market Researcher, GL Reconciler 등). 각각 Cowork 플러그인으로도, `/v1/agents`로 배포하는 [Claude Managed Agent 템플릿](./managed-agent-cookbooks)으로도 제공됩니다.
-- **[Vertical 플러그인](#vertical-플러그인)** — 그 바탕이 되는 스킬, 슬래시 커맨드, 데이터 커넥터를 금융(FSI) 분야별로 묶은 것. 풀 에이전트 없이 `/comps`, `/dcf`, `/earnings`랑 커넥터만 원하면 이것만 따로 설치하면 됩니다.
+- **[에이전트(Agents)](#에이전트)** — 이름이 붙은, 처음부터 끝까지(end-to-end) 워크플로를 수행하는 에이전트 (Pitch Agent, Market Researcher, GL Reconciler 등). 각각 Cowork 플러그인으로도, `/v1/agents`로 배포하는 [Claude Managed Agent 템플릿](./managed-agent-cookbooks)으로도 제공된다.
+- **[Vertical 플러그인](#vertical-플러그인)** — 그 바탕이 되는 스킬, 슬래시 커맨드, 데이터 커넥터를 금융(FSI) 분야별로 묶은 것. 풀 에이전트 없이 `/comps`, `/dcf`, `/earnings`랑 커넥터만 원하면 이것만 따로 설치하면 된다.
 
 ## 에이전트
 
-각 에이전트는 자신이 수행하는 워크플로 이름을 그대로 가집니다. 이들은 **출발점**입니다: 내 업무에 맞는 걸 설치한 뒤, 프롬프트·스킬·커넥터를 우리 회사 방식에 맞게 튜닝하세요.
+각 에이전트는 자신이 수행하는 워크플로 이름을 그대로 가진다. 이들은 **출발점**이다: 내 업무에 맞는 걸 설치한 뒤, 프롬프트·스킬·커넥터를 우리 회사 방식에 맞게 튜닝하면 된다.
 
-각 에이전트 플러그인은 **자기완결적(self-contained)**입니다 — 자신이 쓰는 스킬을 함께 번들로 담고 있어서, 에이전트만 설치하면 끝입니다.
+각 에이전트 플러그인은 **자기완결적(self-contained)**이다 — 자신이 쓰는 스킬을 함께 번들로 담고 있어서, 에이전트만 설치하면 끝이다.
 
 | 기능 | 에이전트 | 하는 일 |
 |---|---|---|
@@ -88,9 +88,9 @@ export ANTHROPIC_API_KEY=sk-ant-...
 scripts/deploy-managed-agent.sh gl-reconciler
 ```
 
-[`managed-agent-cookbooks/`](./managed-agent-cookbooks) 아래 각 템플릿은 플러그인 짝과 **동일한 시스템 프롬프트와 스킬을 참조**합니다. 배포 스크립트가 파일 참조를 해석하고, 스킬을 업로드하고, 리프 워커 서브에이전트를 생성하고, 오케스트레이터를 `/v1/agents`에 POST합니다. 자체 오케스트레이션 레이어를 통해 에이전트 간 `handoff_request` 이벤트를 라우팅하는 레퍼런스 이벤트 루프는 [`scripts/orchestrate.py`](./scripts/orchestrate.py) 참고.
+[`managed-agent-cookbooks/`](./managed-agent-cookbooks) 아래 각 템플릿은 플러그인 짝과 **동일한 시스템 프롬프트와 스킬을 참조**한다. 배포 스크립트가 파일 참조를 해석하고, 스킬을 업로드하고, 리프 워커 서브에이전트를 생성하고, 오케스트레이터를 `/v1/agents`에 POST한다. 자체 오케스트레이션 레이어를 통해 에이전트 간 `handoff_request` 이벤트를 라우팅하는 레퍼런스 이벤트 루프는 [`scripts/orchestrate.py`](./scripts/orchestrate.py) 참고.
 
-> **리서치 프리뷰:** 서브에이전트 위임(`callable_agents`)은 프리뷰 기능입니다. 보안 및 핸드오프 가이드는 에이전트별 README 참고.
+> **리서치 프리뷰:** 서브에이전트 위임(`callable_agents`)은 프리뷰 기능이다. 보안 및 핸드오프 가이드는 에이전트별 README 참고.
 
 ## 어떻게 맞물리나 (How It Fits Together)
 
@@ -106,7 +106,7 @@ scripts/deploy-managed-agent.sh gl-reconciler
 
 ## Vertical 플러그인
 
-**financial-analysis**부터 시작하세요 — 공유 모델링 스킬과 모든 데이터 커넥터를 담고 있습니다. 필요한 워크플로에 맞는 vertical을 추가하세요.
+**financial-analysis**부터 시작하면 된다 — 공유 모델링 스킬과 모든 데이터 커넥터를 담고 있다. 필요한 워크플로에 맞는 vertical을 추가하면 된다.
 
 | 플러그인 | 추가되는 것 |
 |---|---|
@@ -122,7 +122,7 @@ scripts/deploy-managed-agent.sh gl-reconciler
 
 ## MCP 통합
 
-모든 커넥터는 **financial-analysis** 코어 플러그인에 모여 있고 나머지에서 공유됩니다.
+모든 커넥터는 **financial-analysis** 코어 플러그인에 모여 있고 나머지에서 공유된다.
 
 | 제공자 | URL |
 |---|---|
@@ -139,24 +139,24 @@ scripts/deploy-managed-agent.sh gl-reconciler
 | [Egnyte](https://www.egnyte.com/) | `https://mcp-server.egnyte.com/mcp` |
 | [Box](https://www.box.com/home) | `https://mcp.box.com` |
 
-> MCP 접근에는 제공자의 구독이나 API 키가 필요할 수 있습니다.
+> MCP 접근에는 제공자의 구독이나 API 키가 필요할 수 있다.
 
 ## Claude for Microsoft 365 — 설치 도구
 
-회사에서 Microsoft 365 애드인을 통해 Excel·PowerPoint·Word·Outlook 안에서 Claude를 돌린다면, [`claude-for-msft-365-install/`](./claude-for-msft-365-install)이 그것을 **당신 자체 클라우드**(Vertex AI, Bedrock, 또는 내부 LLM 게이트웨이) — 앤트로픽 API가 아니라 — 에 맞춰 프로비저닝하는 어드민 도구입니다.
+회사에서 Microsoft 365 애드인을 통해 Excel·PowerPoint·Word·Outlook 안에서 Claude를 돌린다면, [`claude-for-msft-365-install/`](./claude-for-msft-365-install)이 그것을 **당신 자체 클라우드**(Vertex AI, Bedrock, 또는 내부 LLM 게이트웨이) — 앤트로픽 API가 아니라 — 에 맞춰 프로비저닝하는 어드민 도구다.
 
-이것은 (Cowork 플러그인이 아니라) **Claude Code 플러그인**으로, IT 관리자가 커스텀 애드인 매니페스트 생성, Azure 관리자 동의 부여, Microsoft Graph로 사용자별 라우팅 설정 작성을 단계별로 진행하도록 안내합니다. 설치:
+이것은 (Cowork 플러그인이 아니라) **Claude Code 플러그인**으로, IT 관리자가 커스텀 애드인 매니페스트 생성, Azure 관리자 동의 부여, Microsoft Graph로 사용자별 라우팅 설정 작성을 단계별로 진행하도록 안내한다. 설치:
 
 ```bash
 claude plugin install claude-for-msft-365-install@claude-for-financial-services
 /claude-for-msft-365-install:setup
 ```
 
-이것은 위의 에이전트·vertical 플러그인과 **별개**입니다 — 테넌트에 애드인을 배포하는 진입로(on-ramp)이고, 그 후 여기 있는 에이전트와 스킬이 그 안에서 돌아갑니다.
+이것은 위의 에이전트·vertical 플러그인과 **별개**다 — 테넌트에 애드인을 배포하는 진입로(on-ramp)이고, 그 후 여기 있는 에이전트와 스킬이 그 안에서 돌아간다.
 
 ## 내 것으로 만들기 (Making It Yours)
 
-이것들은 레퍼런스 템플릿입니다 — 우리 회사 방식에 맞게 튜닝할수록 좋아집니다.
+이것들은 레퍼런스 템플릿이다 — 우리 회사 방식에 맞게 튜닝할수록 좋아진다.
 
 - **커넥터 교체** — `.mcp.json`을 당신의 데이터 제공자와 내부 시스템으로 향하게 하기.
 - **회사 컨텍스트 추가** — 용어, 프로세스, 포맷 기준을 스킬 파일에 넣기.
@@ -255,7 +255,7 @@ claude plugin install claude-for-msft-365-install@claude-for-financial-services
 
 ## 기여 (Contributing)
 
-여기 있는 모든 것은 마크다운과 YAML입니다. 포크, 수정, PR. 새 콘텐츠:
+여기 있는 모든 것은 마크다운과 YAML이다. 포크, 수정, PR. 새 콘텐츠:
 
 - 새 스킬 → `plugins/vertical-plugins/<vertical>/skills/` 아래 추가, 그다음 `python3 scripts/sync-agent-skills.py`로 그걸 번들하는 에이전트에 전파.
 - 새 에이전트 → `plugins/agent-plugins/<slug>/` (`agents/<slug>.md` + `skills/`) 와 짝이 되는 `managed-agent-cookbooks/<slug>/`.
