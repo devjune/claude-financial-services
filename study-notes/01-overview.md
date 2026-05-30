@@ -1,4 +1,4 @@
-# 00. 전체 지도
+# 01. 전체 지도
 
 > anthropics/financial-services 스터디 노트. 금융권 실무용 Claude 에이전트 레퍼런스 모음집.
 
