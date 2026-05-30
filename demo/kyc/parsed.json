@@ -1,0 +1,32 @@
+{
+  "_comment": "Output of the kyc-doc-parse skill — structured fields extracted from packet PKT-DEMO-001. In the real agent this is produced by the doc-reader subagent reading the .txt/PDF files; here it is the faithful parsed record that feeds the rules engine.",
+  "packet_id": "PKT-DEMO-001",
+  "applicant_type": "entity",
+  "legal_name": "Acme Holdings Ltd",
+  "dob_or_formation_date": "2019-03-12",
+  "nationality_or_jurisdiction": "KY",
+  "registered_address": "94 Solaris Avenue, Camana Bay, Grand Cayman, KY1-1108",
+  "id_documents": [],
+  "beneficial_owners": [
+    {"name": "Jane Roe", "dob": "1979-06-04", "nationality": "GB", "ownership_pct": 60, "control_basis": "ownership"},
+    {"name": "Dmitri Volkov", "dob": "1971-11-22", "nationality": "RU", "ownership_pct": 40, "control_basis": "ownership"}
+  ],
+  "controllers": [
+    {"name": "Jane Roe", "role": "director"},
+    {"name": "Acme Corporate Services Ltd", "role": "authorised signatory"}
+  ],
+  "source_of_funds": "Proceeds from sale of UK commercial property (London EC2), completed 2023-08-30 — ref SOF-LON-2023-0830",
+  "pep_declared": true,
+  "tax_forms": [{"type": "W-8BEN-E", "signed_date": "2026-01-15"}],
+  "documents_received": [
+    {"type": "Certificate of incorporation", "ref": "CY-318842", "date": "2019-03-12"},
+    {"type": "UBO declaration", "ref": "PKT-DEMO-001", "date": "2026-05-01"},
+    {"type": "Address proof (utility bill)", "ref": "CUC", "date": "2026-05-10"},
+    {"type": "Source of funds", "ref": "SOF-LON-2023-0830", "date": "2023-08-30"},
+    {"type": "Tax form (W-8BEN-E)", "ref": "W8", "date": "2026-01-15"}
+  ],
+  "inventory_gaps": [
+    "No certified ID (passport/national ID) for UBO Jane Roe",
+    "No certified ID (passport/national ID) for UBO Dmitri Volkov"
+  ]
+}

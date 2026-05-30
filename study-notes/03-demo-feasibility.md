@@ -28,6 +28,18 @@
 
 > 데모 순서 제안: KYC(도메인 공감) → GL(거버넌스/사람승인) → DCF(엑셀 결과물 임팩트). 단순→철학→임팩트 흐름.
 
+## ✅ 실제 검증 결과 (2026-05-30, 오프라인 테스트 완료)
+
+`demo/` 폴더에 3종을 실제로 만들어 돌려봄. 전부 openpyxl만으로 오프라인 작동 확인.
+
+| 데모 | 실행 | 결과 |
+|---|---|---|
+| **KYC** | `python3 demo/kyc/kyc_screen.py` | risk=high, **escalate-EDD**, 룰 R1~R7 근거 인용, R7 스크리닝 not-run |
+| **GL** | `python3 demo/gl-reconciler/recon.py` | 5행 중 break 4개 (Timing/FX/Quantity/GL-only) 정확 분류 |
+| **DCF** | `python3 demo/dcf/build_dcf.py` + validate | validate **PASS**, live formula 83개, 주당 $46.15 / -7.7% |
+
+→ 데모 재료(입력+산출 xlsx)는 `demo/` 에 커밋됨. 발표 때 그대로 사용. 자세한 실행법은 `demo/README.md`.
+
 ## 데모 레시피 (확정 2종)
 
 ### GL Reconciler
