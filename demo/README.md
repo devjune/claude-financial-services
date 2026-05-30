@@ -6,6 +6,17 @@
 
 전제: `pip install openpyxl` (한 번). 네트워크·MS Office·API 키 불필요.
 
+## 0. Hello — `00-hello-xlsx/` (여기서 시작)
+
+세 데모의 공통 원리를 15줄로 보여주는 최소 예제. xlsx-author 스킬의 핵심 3원칙
+(파란=입력 / 검정=수식 / openpyxl로 ./out 생성)만 담음.
+
+```bash
+cd 00-hello-xlsx && python3 hello.py
+```
+- 출력: `out/hello.xlsx` — `Model!C2 = =Inputs!C2*(1+Inputs!C3)` (열면 1120)
+- 이걸 이해하면 아래 3개는 "이 패턴을 크게 키운 것"으로 읽힌다.
+
 ## 1. KYC Screener — `kyc/` ★ 핀테크 도메인
 
 법인 온보딩 패킷을 파싱 → 룰 그리드 적용 → 리스크 등급/디스포지션 산출.

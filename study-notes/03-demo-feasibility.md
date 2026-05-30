@@ -14,6 +14,19 @@
 | Statement Auditor | 🟡 YELLOW | NAV 팩 + 명세서 둘 다 위조 필요 |
 | Month-End Closer | 🔴 RED | 결산 전체가 GL MCP에서 당김. 데이터 대량 위조 → 데모 비추 |
 
+### 재평가: Market Researcher (당초 🔴 → 사실 셋업은 제일 쉬움)
+
+처음엔 capiq/factset 의존으로 RED 줬으나, 스킬을 다시 보니 **두 종류 데모가 섞여 있음**:
+- `sector-overview`, `competitive-analysis`, `idea-generation` 스킬엔 **MCP·데이터소스 언급이 아예 없음** → 방법론(구조화) 스킬. Claude 지식(+웹검색)만으로 작동.
+- `comps-analysis`만 유료 멀티플 필요. 없으면 숫자를 `[UNSOURCED]`로 표시(가드레일), 멈추진 않음.
+
+→ **"라이브로 에이전트가 생각하는 걸 보여주는" 데모로는 셋업 마찰 최저** (위조 파일 0, openpyxl 불필요). 단점: ① 인터넷 필요, ② comps 숫자 약함, ③ 산출물이 텍스트 노트라 엑셀 임팩트는 덜함, ④ 재현성 낮음.
+
+**두 데모 아키타입:**
+- 결정론/통제형(KYC·GL·DCF): 파일 in→out, 재현가능, 구체 산출물, 완전 오프라인.
+- 에이전트/서사형(Market Researcher): 셋업 0, 라이브 추론+스킬 오케스트레이션 시연.
+→ 오프너로 Researcher(라이브 훅) → 본편으로 파일 데모 조합도 좋음.
+
 ## 공통 함정 (전부 해당)
 
 1. **샘플 데이터 0개** — 레포에 xlsx·csv·pdf 하나도 없음. 입력 파일 전부 직접 제작. (GL=CSV 2개, DCF=가정값 몇 줄이라 쉬움)
