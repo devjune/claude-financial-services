@@ -9,8 +9,8 @@ anthropics/financial-services 레포 학습 기록. 4개 문서로 정리.
 | 02 | [demo-test](02-demo-test.md) | 데모 **난이도 매트릭스 + 구동 검증 기록** |
 | 03 | [overview](03-overview.md) | 레포 **구조 지도 + 철학** (그 외 전부) |
 
-관련: [`demo/`](../demo/) — 데모 실행 파일·샘플·산출물 (실행법은 `demo/README.md`).
+관련: [`study-demo/`](../study-demo/) — Claude 스킬(`demo-visualizer`) + 시나리오 + 마크다운/mermaid 결과 (파이썬 없음).
 
 ## 역할 경계 (중복 방지)
 
-- **발표 흐름 + 용어** → 01 / **데모 난이도·검증** → 02 / **실행 단계** → demo/README / **구조·철학** → 03
+- **발표 흐름 + 용어** → 01 / **데모 난이도·구현** → 02 / **스킬·결과물** → study-demo / **구조·철학** → 03

@@ -1,9 +1,0 @@
-FORM W-8BEN-E (entity tax certification)
-Entity: Acme Holdings Ltd
-Country of incorporation: Cayman Islands
-Chapter 3 status: Corporation
-Signed: 2026-01-15
-Signed by: Jane Roe (director)
-
-NOTE: No certified passport / national ID copies for the UBOs (Jane Roe,
-Dmitri Volkov) are included in this packet.

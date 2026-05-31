@@ -2,7 +2,7 @@
 
 > 대상: **백엔드(스프링) 개발자**. 각도: "AI 에이전트 레포지만, 사실은 **아키텍처 패턴 교본**."
 > 금융 도메인은 배경. 각 패턴을 **스프링 이디엄 + SOLID/KISS/DRY**에 매핑한다.
-> 데모 실행은 [`demo/`](../demo/), 난이도/검증은 [02-demo-test](02-demo-test.md), 도메인 상세는 [03-overview](03-overview.md).
+> 데모는 [`study-demo/`](../study-demo/) (Claude 스킬 + 마크다운/mermaid), 난이도/검증은 [02-demo-test](02-demo-test.md), 도메인 상세는 [03-overview](03-overview.md).
 
 ## 0. 한 줄 훅
 
@@ -95,7 +95,7 @@ sequenceDiagram
 |---|---|---|
 | **① Market Researcher** | 플러그인 조립(3) + 데이터 Strategy(4) | 스킬을 순서대로 오케스트레이션, 데이터 없으면 `[UNSOURCED]` |
 | **② KYC Screener** ★ | 신뢰 경계(6) + 승인 게이트(7) | untrusted 문서 → 룰엔진 → escalate(절대 자동승인 X) |
-| **③ Model Builder (DCF)** | 선언적 명세 → 산출물 생성(3) | 가정(입력) ↔ 수식(로직) 분리, 바꾸면 재계산 |
+| **③ Model Builder (DCF)** | 선언적 명세 → 산출물 생성(3) | 가정(시나리오) → 계산 체인 → 민감도, md+mermaid 리포트로 |
 
 > 데모는 도메인이 아니라 **패턴의 실증**으로 보여준다. (GL Reconciler = SSoT·승인게이트 백업)
 
