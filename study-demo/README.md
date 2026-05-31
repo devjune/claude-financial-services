@@ -6,13 +6,15 @@
 
 ## 구조
 
+스킬은 **프로젝트 스코프**로 설치되어 세션에서 바로 호출된다.
+
 ```
+.claude/skills/demo-visualizer/SKILL.md   ← 직접 작성한 Claude 스킬 (프로젝트 스코프)
 study-demo/
-├── demo-visualizer/SKILL.md   ← 직접 작성한 Claude 스킬 (스터디 핵심 산출물)
-├── scenarios/                  ← 입력 데이터 (마크다운)
-│   ├── kyc.md  ·  gl-recon.md  ·  dcf.md
-└── outputs/                    ← 스킬이 만든 결과 예시 (마크다운+mermaid, Excel 대체용)
-    ├── kyc-screening.md  ·  gl-recon.md  ·  dcf-valuation.md
+├── scenarios/        ← 입력 (kyc.md · kyc-retail.md · gl-recon.md · dcf.md)
+├── outputs/          ← 스킬이 만든 골든 결과 (md+mermaid, Excel 대체용)
+│   └── kyc-screening.md · kyc-retail.md · gl-recon.md · dcf-valuation.md
+└── render-mermaid.sh ← 결과의 mermaid를 PNG로 미리보기 (bash, 파이썬X)
 ```
 
 ## 왜 이렇게 (파이썬 → 스킬)

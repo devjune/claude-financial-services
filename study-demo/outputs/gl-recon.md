@@ -1,7 +1,7 @@
 # GL ↔ 보조원장 대사 결과 — 2026-05-05 (주식)
 
 > 📄 **Excel/Office 산출물 대체용** — 마크다운+mermaid 시각화 (파이썬 의존성 없음).
-> 입력: [`scenarios/gl-recon.md`](../scenarios/gl-recon.md) · 스킬: [`demo-visualizer`](../demo-visualizer/SKILL.md)
+> 입력: [`scenarios/gl-recon.md`](../scenarios/gl-recon.md) · 스킬: [`demo-visualizer`](../../.claude/skills/demo-visualizer/SKILL.md)
 > 원래 GL Reconciler 에이전트는 break-report 엑셀을 만든다. 이 리포트는 같은 결과를 의존성 없이 보여준다.
 
 ## 대사 파이프라인

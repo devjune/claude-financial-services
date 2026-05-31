@@ -1,7 +1,7 @@
 # KYC 스크리닝 결과 — PKT-RETAIL-007 (Kim Min-jun)
 
 > 📄 **Excel/Office 산출물 대체용** — 마크다운+mermaid 시각화 (파이썬 의존성 없음).
-> 입력: [`scenarios/kyc-retail.md`](../scenarios/kyc-retail.md) · 스킬: [`demo-visualizer`](../demo-visualizer/SKILL.md)
+> 입력: [`scenarios/kyc-retail.md`](../scenarios/kyc-retail.md) · 스킬: [`demo-visualizer`](../../.claude/skills/demo-visualizer/SKILL.md)
 
 ## 신청자
 

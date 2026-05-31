@@ -1,7 +1,7 @@
 # KYC 스크리닝 결과 — PKT-DEMO-001 (Acme Holdings Ltd)
 
 > 📄 **Excel/Office 산출물 대체용** — 마크다운+mermaid 시각화 (파이썬 의존성 없음).
-> 입력: [`scenarios/kyc.md`](../scenarios/kyc.md) · 스킬: [`demo-visualizer`](../demo-visualizer/SKILL.md)
+> 입력: [`scenarios/kyc.md`](../scenarios/kyc.md) · 스킬: [`demo-visualizer`](../../.claude/skills/demo-visualizer/SKILL.md)
 > 원래 KYC Screener 에이전트는 에스컬레이션 엑셀을 만든다. 이 리포트는 같은 판정을 의존성 없이 보여준다.
 
 ## 신청자

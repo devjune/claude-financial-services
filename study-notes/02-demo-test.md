@@ -37,7 +37,7 @@
 
 처음엔 파이썬(openpyxl/python-pptx)으로 Office 산출물을 흉내냈지만, 레포 취지(=스킬 스터디)에 맞게 **직접 Claude 스킬을 작성**하고 **마크다운+mermaid로 시각화**하도록 바꿨다. **파이썬·Office 의존성 0.**
 
-- 스킬: [`study-demo/demo-visualizer/SKILL.md`](../study-demo/demo-visualizer/SKILL.md) — 시나리오 → md+mermaid 리포트 (Excel 대체용)
+- 스킬: [`.claude/skills/demo-visualizer/SKILL.md`](../.claude/skills/demo-visualizer/SKILL.md) — 시나리오 → md+mermaid 리포트 (Excel 대체용)
 - 입력: `study-demo/scenarios/{kyc,gl-recon,dcf}.md`
 - 결과 예시: `study-demo/outputs/{kyc-screening,gl-recon,dcf-valuation}.md`
 
