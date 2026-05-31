@@ -23,19 +23,17 @@ study-demo/scenarios/                       ← 입력 (kyc · kyc-retail · gl-
 
 ## 돌려보는 법
 
-**라이브(발표용)** — 대화형 세션에서 슬래시 커맨드:
-
-```
-/demo-visualizer gl        # kyc | kyc-retail | gl | dcf
-```
-
-**헤드리스(검증용)** — 슬래시는 헤드리스에서 확장 안 되므로 인라인 프롬프트:
+`/demo-visualizer`는 결과를 `study-demo/outputs/<arg>.md`로 **저장**한다 (gitignore됨). mermaid는 터미널에서 안 보이니 **`.md`로 만들고 `open`으로 확인**:
 
 ```bash
-claude -p ".claude/skills/demo-visualizer/SKILL.md 스킬대로 study-demo/scenarios/gl-recon.md 를 시각화한 마크다운만 출력."
+# 대화형 세션:  /demo-visualizer gl   →  then:
+open study-demo/outputs/gl.md
+
+# 헤드리스 한 줄:
+claude -p "/demo-visualizer gl" && open study-demo/outputs/gl.md
 ```
 
-> 결과 mermaid는 GitHub/Confluence에서 자동 렌더. 결과를 파일로 남기고 싶으면 `> study-demo/outputs/gl.md` 로 저장(gitignore됨).
+`<arg>` = `kyc | kyc-retail | gl | dcf`. mermaid가 렌더되는 뷰어(VS Code 프리뷰·Typora·Obsidian 등)나 GitHub에서 열면 다이어그램까지 보인다.
 
 ## 데모 3종 (발표 라인업)
 
