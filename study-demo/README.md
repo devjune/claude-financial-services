@@ -1,51 +1,52 @@
-# study-demo — Claude 스킬로 만드는 데모
+# study-demo — 레포 에이전트로 돌리는 데모
 
-> 이 레포는 **Claude 스킬/에이전트 스터디**다. 그래서 데모도 파이썬 스크립트가 아니라
-> **직접 작성한 Claude 스킬**(`demo-visualizer`)로 한다. 스킬이 시나리오를 읽어
-> **마크다운 + mermaid.js 리포트**를 만든다 — **Excel/Office 산출물의 대체용**, 의존성 0.
+> 이 레포는 **Claude 스킬/에이전트 스터디**다. 그래서 데모는 전부 **레포의 실제 에이전트·스킬을
+> 직접 호출**한다 (재구현 없음). 산출물은 Office 파일 대신 **마크다운+mermaid**(Excel/Office 대체용).
 
-## 구조
+## 실행 방법
 
-소스는 **스킬 + 시나리오** 둘뿐. 결과는 스킬을 돌려 **라이브로 생성**한다(커밋 안 함 → `.gitignore`).
-
-```
-.claude/skills/demo-visualizer/SKILL.md   ← 스킬 (프로젝트 스코프, 노하우)
-.claude/commands/demo-visualizer.md       ← /demo-visualizer 슬래시 커맨드 (래퍼)
-study-demo/scenarios/                       ← 입력 (kyc · kyc-retail · gl-recon · dcf)
-       └─ (결과는 스킬이 그때그때 생성)
-```
-
-## 왜 이렇게 (파이썬 → 스킬, 라이브 중심)
-
-- 이 레포의 본질은 **"SKILL.md를 어떻게 쓰는가"**다. 파이썬으로 엑셀을 찍는 건 취지와 무관 → **스킬 작성 + 마크다운/mermaid 출력**으로.
-- 결과물을 미리 만들어 커밋하지 않는다. **스킬 돌리는 것 자체가 데모.** (소스 = 시나리오+스킬, 결과 = 매번 재생성)
-- 마크다운+mermaid는 **GitHub·Confluence에서 그대로 렌더** — 파이썬·Office 불필요.
-
-## 돌려보는 법
-
-`/demo-visualizer`는 결과를 `study-demo/outputs/<arg>.md`로 **저장**한다 (gitignore됨). mermaid는 터미널에서 안 보이니 **`.md`로 만들고 `open`으로 확인**:
+대화형 세션을 띄우고 — `cd /Users/sjune/ai-docs/study/claude-financial-services && claude` —
+아래 프롬프트 중 하나를 **붙여넣고 엔터**. 권한 물으면 승인. 끝나면 저장된 `.md`를 `open`.
 
 ```bash
-# 대화형 세션:  /demo-visualizer gl   →  then:
-open study-demo/outputs/gl.md
-
-# 헤드리스 한 줄:
-claude -p "/demo-visualizer gl" && open study-demo/outputs/gl.md
+open study-demo/outputs/<name>.md     # mermaid는 VS Code 프리뷰·Typora·Obsidian·GitHub에서 렌더
 ```
 
-`<arg>` = `kyc | kyc-retail | gl | dcf`. mermaid가 렌더되는 뷰어(VS Code 프리뷰·Typora·Obsidian 등)나 GitHub에서 열면 다이어그램까지 보인다.
+> 입력 시나리오: `study-demo/scenarios/{kyc, kyc-retail, gl-recon, dcf}.md`. Researcher는 시나리오 없이 라이브 웹.
+> `study-demo/outputs/`는 gitignore — 결과는 매번 라이브 생성(커밋 안 함).
 
-## 데모 3종 (발표 라인업)
+---
 
-| 시나리오 | 입력 | 보여주는 것 |
-|---|---|---|
-| **KYC** ★ | [scenarios/kyc.md](scenarios/kyc.md) | 신뢰경계 + 룰 판정 + 승인 게이트 (지분 그래프·판정 흐름) |
-| **GL 대사** | [scenarios/gl-recon.md](scenarios/gl-recon.md) | 대사 파이프라인 + break 분류 (파이 차트) |
-| **DCF** | [scenarios/dcf.md](scenarios/dcf.md) | 선언적 가정 → 계산 체인 → 민감도 |
+## 데모 커맨드 (붙여넣기용)
 
-> **Market Researcher**(발표 오프너)는 시나리오 파일 없이 웹검색으로 **라이브** 구동.
-> 레포의 실제 에이전트를 헤드리스로 직접 호출 (유일하게 **비결정적** — 라이브 웹데이터).
+### 1. Market Researcher — 발표 오프너 (라이브 웹, 비결정적)
 
-## 재현성 (라이브인데 항상 같게?)
+```
+plugins/agent-plugins/market-researcher 의 Market Researcher 에이전트로서, sector-overview·competitive-analysis·idea-generation 스킬을 따라 '디지털 결제' 섹터 리서치 노트를 만들어줘. CapIQ/FactSet MCP 없으니 못 대는 수치는 [UNSOURCED], 웹검색 사용. 경쟁 구도는 mermaid(다크 테마). 그리고 결과를 study-demo/outputs/research-payments.md 에 저장해줘(폴더 없으면 만들고).
+```
 
-결과를 커밋하지 않으니 "항상 동일"은 **스킬의 결정성 계약**에 기댄다: 섹션·표·다이어그램 구조 고정 + 숫자는 규칙으로만 결정적 도출(DCF·GL분류·룰판정 모두 deterministic). 변동 여지는 문장 표현뿐. 단, **LLM은 바이트 단위로 결정적이진 않다** — 발표 직전 한 번 돌려 확인하고 그 화면을 쓰면 안전.
+### 2. KYC Screener ★ — 카카오페이 도메인
+
+```
+plugins/agent-plugins/kyc-screener 의 KYC Screener 에이전트로서, kyc-doc-parse·kyc-rules 스킬을 따라 study-demo/scenarios/kyc.md 온보딩 패킷을 심사해줘. 스크리닝 MCP 없으니 제재/PEP 스크리닝은 not-run으로. 산출물은 엑셀 대신 마크다운+mermaid — 지분 구조와 룰 판정 흐름 다이어그램(다크), 룰 결과 표, 디스포지션 포함. 승인은 사람. 그리고 결과를 study-demo/outputs/kyc.md 에 저장해줘(폴더 없으면 만들고).
+```
+
+### 3. GL Reconciler — "AI는 초안, 기표는 사람"
+
+```
+plugins/agent-plugins/gl-reconciler 의 GL Reconciler 에이전트로서, gl-recon·break-trace 스킬을 따라 study-demo/scenarios/gl-recon.md 의 GL과 보조원장을 대사해줘. 내부 MCP 없이 제공된 표만으로. 산출물은 엑셀 대신 마크다운+mermaid — 대사 파이프라인과 버킷 분포 다이어그램(다크), break 표(|Δ| 내림차순) 포함. 기표는 사람. 그리고 결과를 study-demo/outputs/gl.md 에 저장해줘(폴더 없으면 만들고).
+```
+
+### 4. Model Builder (DCF) — 임팩트 클로징
+
+```
+plugins/agent-plugins/model-builder 의 Model Builder 에이전트로서, dcf-model 스킬을 따라 study-demo/scenarios/dcf.md 의 가정으로 DCF를 계산해줘. CapIQ 없이 시나리오 가정값만 사용. 산출물은 live-formula 엑셀 대신 마크다운+mermaid — 계산 체인 다이어그램(다크), 연도별 추정·민감도 표 포함. 투자권유 아님. 그리고 결과를 study-demo/outputs/dcf.md 에 저장해줘(폴더 없으면 만들고).
+```
+
+---
+
+## 참고
+
+- **결정성**: Researcher만 비결정적(라이브 웹데이터). KYC/GL/DCF는 규칙 기반이라 재실행해도 거의 동일.
+- **다른 시나리오**: KYC를 개인·저위험으로 보려면 `scenarios/kyc.md` → `scenarios/kyc-retail.md` (결과 escalate-EDD 대신 request-docs).
+- **발표**: 관객 앞에서 `claude` 띄우고 위 프롬프트 한 줄 → 에이전트가 일하는 모습이 곧 데모. 미리 한 번 돌려 `outputs/`에 저장해두면 안전.

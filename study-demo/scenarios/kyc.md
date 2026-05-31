@@ -1,6 +1,6 @@
 # 시나리오: KYC 온보딩 패킷 PKT-DEMO-001
 
-> 입력 데이터(untrusted). `demo-visualizer` 스킬이 이걸 읽어 마크다운+mermaid 리포트를 만든다.
+> 입력 데이터(untrusted). 레포 에이전트가 이걸 입력으로 읽어 마크다운+mermaid 리포트를 만든다.
 
 ## 온보딩 문서 (신청자 제출 — 신뢰하지 않음)
 

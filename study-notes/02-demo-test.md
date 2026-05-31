@@ -33,21 +33,19 @@
 
 **Market Researcher → KYC → DCF** (단순→도메인→임팩트). GL은 백업.
 
-## 우리 데모 구현 — Claude 스킬 + 마크다운/mermaid
+## 우리 데모 구현 — 레포 에이전트 직접 호출
 
-처음엔 파이썬(openpyxl/python-pptx)으로 Office 산출물을 흉내냈지만, 레포 취지(=스킬 스터디)에 맞게 **직접 Claude 스킬을 작성**하고 **마크다운+mermaid로 시각화**하도록 바꿨다. **파이썬·Office 의존성 0.**
+데모는 전부 **레포의 실제 에이전트·스킬을 직접 호출**한다 (재구현 X — 한때 만들었던 demo-visualizer 스킬은 은퇴). 산출물만 Office 대신 **마크다운+mermaid**로.
 
-- 스킬: [`.claude/skills/demo-visualizer/SKILL.md`](../.claude/skills/demo-visualizer/SKILL.md) — 시나리오 → md+mermaid 리포트 (Excel 대체용)
-- 슬래시: `.claude/commands/demo-visualizer.md` → `/demo-visualizer <kyc|gl|dcf|...>`
-- 입력: `study-demo/scenarios/{kyc,kyc-retail,gl-recon,dcf}.md`
-- 결과: **스킬로 라이브 생성** (커밋 안 함, `.gitignore`) — "스킬 돌리는 게 곧 데모"
+- 방식: `claude` 대화형 세션에서 **레포 에이전트를 가리키는 프롬프트** 붙여넣기 (붙여넣기용 4개 → [`study-demo/README.md`](../study-demo/README.md))
+- 입력: `study-demo/scenarios/{kyc,kyc-retail,gl-recon,dcf}.md` (Researcher는 라이브 웹)
+- 결과: **라이브 생성** → `study-demo/outputs/`에 저장(커밋 안 함, `.gitignore`)
 
-### 기대 결과 (스킬이 시나리오대로 생성)
-
-| 데모 | 기대 결과 | 시각화 |
+| 데모 | 레포 에이전트 / 스킬 | 기대 결과 |
 |---|---|---|
-| **KYC** ★ | risk=high, **escalate-EDD** (R2 RU·R3 PEP fail, R7 not-run) | 지분 그래프 + 룰 판정 흐름 |
-| **GL** | 5행 중 break 4개 (Timing/FX/Quantity/GL-only) | 대사 파이프라인 + 버킷 파이 |
-| **DCF** | 주당 **$46.15** vs $50 → **−7.7%**, terminal<WACC ✓ | 계산 체인 + 민감도 표 |
+| **Market Researcher** | market-researcher / sector-overview·competitive-analysis·idea-generation | 섹터 노트(웹), comps는 `[UNSOURCED]` |
+| **KYC** ★ | kyc-screener / kyc-doc-parse·kyc-rules | risk=high, **escalate-EDD** (R2 RU·R3 PEP, 스크리닝 not-run) |
+| **GL** | gl-reconciler / gl-recon·break-trace | 5행 중 break 4개 (Timing/FX/Quantity/GL-only) |
+| **DCF** | model-builder / dcf-model | 주당 **$46.15** vs $50 → **−7.7%**, terminal<WACC ✓ |
 
 > 결과 mermaid는 GitHub·Confluence에서 자동 렌더. 재현성은 스킬의 결정성 계약에 기댄다(라이브라 발표 직전 한 번 돌려 확인 권장).
