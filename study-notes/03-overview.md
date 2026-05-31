@@ -1,6 +1,6 @@
-# 01. 전체 지도
+# 03. 개요 + 철학 (나머지 모두)
 
-> anthropics/financial-services 스터디 노트. 금융권 실무용 Claude 에이전트 레퍼런스 모음집.
+> 레포 구조 지도 + README 정독하며 잡은 핵심/철학. 발표 준비의 바탕 자료.
 
 ## 핵심 컨셉: one source, two wrappers
 
@@ -69,6 +69,21 @@ vertical-plugins (스킬 원본)
 
 - fund-admin, operations는 커맨드 없음 → 에이전트가 백그라운드로 트리거하는 스킬 위주.
 - financial-analysis의 `skill-creator` = 스킬 만드는 메타 스킬.
+
+## 핵심 철학 (README 정독 정리)
+
+### 큰 철학
+
+- **에이전트·스킬·데이터 커넥터** 세 가지 모음. 셋 다 필요하지만, 알맹이(노하우)는 **스킬**에 다 들어있음.
+- **원본 1개, 배포 2방식** (two ways from one source): 같은 시스템 프롬프트+스킬을 ① Cowork 플러그인(사람이 직접) ② Managed Agents API(서버 자동)로 씀.
+- **AI는 초안만, 결정은 사람 (★ 레포 전체 1순위 패턴)** — 권유/거래실행/리스크확정/기표/온보딩승인은 안 함. 전부 사람 승인 대기(staged for human sign-off). 금융=규제산업이라 책임 경계를 명확히 그음.
+
+### 에이전트의 두 성질 (★)
+
+- **self-contained(자기완결형)** — 에이전트는 자기가 쓰는 스킬을 통째로 복사해 품음. 그래서 에이전트만 깔면 끝. (스킬 원본은 vertical, 에이전트엔 사본)
+- **starting points(출발점)** — 그대로 쓰는 완제품 아님. 프롬프트·스킬·커넥터를 회사 방식에 맞게 고쳐 쓰라는 것. 레포 전체를 관통하는 톤.
+
+> 용어 풀이는 [01-presentation.md](01-presentation.md#용어집-부록)로 일원화.
 
 ## 다음에 볼 것
 
