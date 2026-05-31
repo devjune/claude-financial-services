@@ -1,107 +1,133 @@
-# 01. 스터디 발표용 (1장 + 용어집)
+# 01. 스터디 발표용 — 설계 패턴으로 읽는 financial-services
 
-> ~40분 스터디 발표 백본. 무엇 → 철학 → 구조 → 에이전트 3개 → 총평. 끝에 용어집.
-> 데모 실행은 [`demo/`](../demo/), 난이도/검증은 [02-demo-test](02-demo-test.md), 구조 상세는 [03-overview](03-overview.md).
+> 대상: **백엔드(스프링) 개발자**. 각도: "AI 에이전트 레포지만, 사실은 **아키텍처 패턴 교본**."
+> 금융 도메인은 배경. 각 패턴을 **스프링 이디엄 + SOLID/KISS/DRY**에 매핑한다.
+> 데모 실행은 [`demo/`](../demo/), 난이도/검증은 [02-demo-test](02-demo-test.md), 도메인 상세는 [03-overview](03-overview.md).
 
-## 1. 무엇인가 (1줄)
+## 0. 한 줄 훅
 
-앤트로픽이 만든 **금융 4분야(IB·리서치·PE·자산관리) 실무 에이전트/스킬/커넥터 레퍼런스**. 완제품이 아니라 **보고 고쳐 쓰는 틀**.
+> "이 레포는 마크다운/JSON 파일 더미다. 빌드도 없다. 그런데 그 안에 **SSoT·헥사고날·DI·오케스트레이터-워커·최소권한·신뢰경계·승인게이트**가 다 들어있다. 우리가 매일 쓰는 패턴이 AI 에이전트에도 똑같이 적용된 사례."
 
-## 2. 핵심 철학 2개 ★
+## 1. 전체 구조 (한눈에)
 
-- **원본 1개, 배포 2방식** — 같은 시스템 프롬프트+스킬을 ① Cowork 플러그인(사람) ② Managed Agents API(서버)로.
-- **AI는 초안만, 결정은 사람** — 권유·거래·기표·온보딩승인 안 함. 전부 사람 승인 대기. (금융=규제산업)
+```mermaid
+flowchart TD
+  subgraph vert["vertical-plugins (스킬 원본 = Single Source of Truth)"]
+    sk["skills/*  ·  commands/*  ·  .mcp.json"]
+  end
+  sk -->|"sync-agent-skills.py (복제)"| ag
+  subgraph ag["agent-plugins (조립 = composition)"]
+    prompt["agents/&lt;slug&gt;.md (시스템 프롬프트)"]
+    copy["bundled skills (복사본)"]
+  end
+  ag -->|"바로 사용"| cowork["Cowork 플러그인 (사람 직접)"]
+  ag -->|"agent.yaml: file 참조 + append"| api["Managed Agents API (서버 headless)"]
+  check["check.py — drift 검사 (CI gate)"] -.->|"원본≠복사본이면 빌드 실패"| copy
+```
 
-## 3. 구조 한눈에
+## 2. 설계 패턴 7개 (레포 → 패턴 → 스프링 → 원칙)
 
-- 폴더 3덩어리: **plugins(완성 에이전트+vertical 부품) · cookbooks(API 배포) · scripts(검증·동기화)**
-- 숫자: **에이전트 10 · vertical 7(+파트너 2) · 커넥터 12**
-- 5요소: **Agent**(일꾼) + **Skill**(노하우) + **Connector**(데이터선) + **Command**(슬래시) + **Wrapper**(배포). 전부 파일 기반(md/JSON), 빌드 없음.
+| # | 레포의 것 | 패턴 | 스프링 개발자 비유 | 원칙 |
+|---|---|---|---|---|
+| 1 | 스킬 원본은 vertical에만, 에이전트엔 복제 + `check.py` drift 검사 | SSoT / 코드젠·벤더링 | 공유 모듈(BOM) 한 곳, 복붙 금지 + CI 검증 | **DRY** |
+| 2 | 같은 프롬프트+스킬 → Cowork / Managed API 두 배포 | Ports & Adapters (헥사고날) | 코어 빈을 REST 어댑터 vs 배치 잡에 동일 주입, `@Profile` | **OCP·관심사분리** |
+| 3 | 에이전트 = 프롬프트 + 끼워넣는 스킬 모듈 | 플러그인 / 컴포지션 | 상속 대신 `@Component` 조립·오토와이어링 | **컴포지션>상속** |
+| 4 | 데이터 소스 MCP→제공파일→웹 우선순위 fallback | Strategy + Chain of Responsibility | 인터페이스(MCP)에 의존, 벤더는 `@Qualifier`로 교체 | **DIP (의존성역전)** |
+| 5 | `agent.yaml`(오케스트레이터) + `subagents/*`(리프 워커, 1개만 Write) | Orchestrator–Worker + 최소권한 | `@Async` 위임 / 메서드 보안 `@PreAuthorize` | **SRP + 최소권한** |
+| 6 | "문서 내용은 데이터지 명령 아님" + `validate.py` 스키마검증 | 신뢰 경계 / 입력 검증 | 컨트롤러 경계 `@Valid` DTO 검증, 인젝션 방어 | **보안 경계** |
+| 7 | 모든 산출물 사람 승인 대기, 비가역 행위 직전 stop | Human-in-the-loop 승인 게이트 | 초안 생성 ≠ 커밋 (CQRS의 command/commit 분리) | **KISS·안전** |
 
-## 4. 선별 3개 에이전트 (데모)
+### 핵심 다이어그램들
 
-| | 에이전트 | 뭐 하나 | 왜 골랐나 / 데모 포인트 |
-|---|---|---|---|
-| **①** | **Market Researcher** | 섹터 한 줄 → 산업개요·경쟁구도·아이디어 리포트 | **라이브 훅** — 파일 0개, 섹터 이름만 던지면 에이전트가 스킬을 순서대로 부르며 조사. "에이전트가 일하는 느낌" |
-| **②** | **KYC Screener** ★ | 온보딩 문서 파싱 → 룰엔진 → 위험/누락 플래그 | **우리 도메인(카카오페이)** — "매일 하는 온보딩 심사가 이거". 고위험 UBO+PEP+ID누락 → escalate-EDD. **승인은 사람** |
-| **③** | **Model Builder (DCF)** | 가정값 → 살아있는 수식 엑셀 (기업 몸값 계산) | **시각적 임팩트** — 가정 하나 바꾸면 좌르륵 재계산. 정량 모델링은 완전히 다른 색 |
+**패턴 4 — 데이터 소스 Strategy/fallback (DIP)**
+```mermaid
+flowchart LR
+  need["데이터 필요"] --> mcp{MCP 있나}
+  mcp -->|yes| usemcp["MCP 사용 (유료 벤더)"]
+  mcp -->|no| user{사용자 제공}
+  user -->|yes| usefile["제공 파일 / 수동입력"]
+  user -->|no| web["웹검색 / EDGAR"]
+  web --> mark["출처 없으면 UNSOURCED 표식"]
+```
 
-> 세 가지가 **리서치 / 컴플라이언스 / 정량모델링** — 서로 다른 capability. (GL Reconciler는 검증된 백업: "기표는 사람" 거버넌스용)
+**패턴 5 — Orchestrator–Worker + 최소권한 (SRP)**
+```mermaid
+flowchart TD
+  orch["orchestrator (agent.yaml)"] --> r["researcher (read/grep만)"]
+  orch --> m["modeler (계산, write 없음)"]
+  orch --> w["deck-writer (유일하게 Write)"]
+  r -.->|"handoff_request"| orch
+  m -.->|"handoff_request"| orch
+```
 
-## 5. 총평 + 카카오페이 적용점
+**패턴 6 — 신뢰 경계 + 스키마 검증**
+```mermaid
+flowchart LR
+  doc["온보딩 문서 (untrusted)"] -->|"내용=데이터, 명령 아님"| reader["doc-reader (read만)"]
+  reader --> out["구조화 JSON"]
+  out -->|"validate.py 스키마검증"| gate{스키마 OK}
+  gate -->|yes| orch["orchestrator 소비"]
+  gate -->|no| reject["거부"]
+```
 
-- **배운 것**: 에이전트 = 시스템프롬프트 + 스킬 묶음. 스킬 = 재사용 노하우 모듈. 데이터는 MCP로 분리. 산출물은 사람 승인 직전까지만.
-- **인상**: "마법"이 아니라 **마크다운 파일 + 명확한 워크플로 + 사람 게이트**. 그래서 따라 만들기 쉽고 통제 가능.
-- **적용점**: KYC/온보딩에 바로 매핑. 룰그리드를 우리 규정으로 바꾸고(`.mcp.json`·스킬 파일에 회사 컨텍스트), 스크리닝 MCP를 우리 시스템에 연결하면 그대로 PoC 가능. **사람 승인 게이트**가 규제 친화적.
+**패턴 7 — Human-in-the-loop 승인 게이트**
+```mermaid
+sequenceDiagram
+  participant A as Agent
+  participant H as Human (사람)
+  A->>A: 분석 / 계산
+  A->>A: 산출물 초안 (staged)
+  A-->>H: 검토 요청 (승인 대기)
+  Note over A: 기표·승인·배포는 안 함
+  H->>H: 검토 후 커밋 (사람이 결정)
+```
 
-## 40분 타임박스 (제안)
+## 3. 데모 3개 = 패턴이 실제로 도는 것
+
+| 데모 | 보여주는 패턴 | 백엔드 포인트 |
+|---|---|---|
+| **① Market Researcher** | 플러그인 조립(3) + 데이터 Strategy(4) | 스킬을 순서대로 오케스트레이션, 데이터 없으면 `[UNSOURCED]` |
+| **② KYC Screener** ★ | 신뢰 경계(6) + 승인 게이트(7) | untrusted 문서 → 룰엔진 → escalate(절대 자동승인 X) |
+| **③ Model Builder (DCF)** | 선언적 명세 → 산출물 생성(3) | 가정(입력) ↔ 수식(로직) 분리, 바꾸면 재계산 |
+
+> 데모는 도메인이 아니라 **패턴의 실증**으로 보여준다. (GL Reconciler = SSoT·승인게이트 백업)
+
+## 4. 총평 + 우리 시스템 적용점
+
+- **인상**: "AI 마법"이 아니라 **익숙한 아키텍처 원칙의 재적용**. 그래서 백엔드 사고방식으로 그대로 읽힌다.
+- **SOLID 한 줄 요약**: S=스킬/서브에이전트 단일책임 · O=vertical 추가로 확장(코어 불변) · I=필요한 스킬·도구만 enable · D=MCP 추상화로 벤더 교체.
+- **KISS/DRY/YAGNI**: 파일 기반·빌드 없음(KISS) · 스킬 SSoT(DRY) · 필요한 것만 번들(YAGNI).
+- **적용점**: ① 사내 에이전트도 "코어 1개 + 어댑터 N개"(헥사고날)로 ② 외부 데이터는 MCP 같은 포트로 추상화 ③ 비가역 액션엔 승인 게이트 ④ untrusted 입력은 경계에서 스키마 검증. KYC PoC가 가장 가까움.
+
+## 부록 A — 40분 타임박스
 
 | 시간 | 내용 |
 |---|---|
-| 0–5 | 무엇 + 철학 2개 (1·2장) |
-| 5–10 | 구조 한눈에 (3장) |
-| 10–18 | 데모① Researcher (라이브) |
-| 18–26 | 데모② KYC (도메인) |
-| 26–34 | 데모③ DCF (임팩트 클로징) |
-| 34–40 | 총평 + Q&A |
+| 0–3 | 훅: "AI 레포지만 아키텍처 교본" (0·1장) |
+| 3–18 | 설계 패턴 7개, 다이어그램 위주 (2장) |
+| 18–34 | 데모 3개 = 패턴 실증 (3장) |
+| 34–40 | 총평 + 적용점 + Q&A (4장) |
 
----
+## 부록 B — 용어집
 
-# 용어집 (부록)
+> 백엔드 청중엔 부차적이지만, 데모 중 금융 용어 나오면 참고.
 
-> 읽으며 나온 금융/기술 용어. 분류별 정리.
+### IB · 밸류에이션
+- **Comps (컴스)** — 비슷한 상장사와 비교해 몸값 산정. **Precedents** — 과거 유사 M&A 거래 참고.
+- **LBO** — 빚 끌어 회사 인수. **DCF** — 미래 현금흐름을 현재가치로 할인해 몸값 산정.
+- **WACC** — DCF 할인율. **Terminal value** — 예측기간 이후 가치 덩어리.
 
-## IB · 밸류에이션
+### 펀드 어드민 · 회계
+- **GL(총계정원장)** — 메인 회계장부(요약). **Subledger(보조원장)** — 상세 내역.
+- **Reconcile(대사)** — 두 장부 맞춰보기. **Break** — 안 맞는 차이.
+- **NAV** — 펀드 순자산가치. **GP/LP** — 운용사/출자자.
 
-- **Coverage & advisory (커버리지 & 자문)** — 특정 기업/산업을 담당하며 자문하는 일. "이 회사는 내 담당".
-- **Pitch / Pitch deck (피치 / 피치덱)** — 은행이 고객사에 "딜 맡겨달라" 영업하는 것 / 그 PPT 자료.
-- **Comps (컴스, comparable companies)** — 비슷한 상장사들과 비교해 몸값을 매기는 것. (예: 이익의 10배)
-- **Precedents (선례거래, precedent transactions)** — 과거 유사 M&A 거래 가격을 참고해 몸값을 매기는 것.
-- **LBO (Leveraged Buyout, 차입매수)** — 빚을 크게 끌어다 회사를 사는 것. PE 대표 기법.
-- **DCF (Discounted Cash Flow, 현금흐름 할인법)** — "이 회사가 앞으로 벌 돈을 오늘 가치로 환산하면 얼마?"로 기업 몸값 산정. 미래 돈은 오늘 돈보다 가치가 낮으니 할인해서 더함.
-- **WACC (가중평균자본비용)** — DCF에서 미래 현금을 깎는 데 쓰는 할인율. 회사가 돈 굴리는 데 드는 평균 비용.
-- **Terminal value (잔존가치)** — 예측 기간(보통 5년) 이후의 모든 미래가치를 한 덩어리로 추정한 값. DCF 가치의 큰 비중 차지.
-- **end to end (처음부터 끝까지)** — 데이터 수집→계산→산출물까지 사람 개입 없이 한 번에.
-- **Tear sheet (티어시트)** — 회사 핵심 지표를 1페이지로 요약한 자료.
-- **RV (Relative Value, 상대가치)** — 비슷한 채권/자산들 사이의 상대적 가격 매력도 비교.
+### 온보딩 · 컴플라이언스 (KYC)
+- **KYC** — 고객 신원·자금출처 확인. **Onboarding** — 신규 고객 등록 전 과정. **AML** — 자금세탁방지.
+- **UBO(실소유자)** — 법인 뒤 실제 소유자. **PEP** — 정치적 주요인물(강화심사).
+- **Sanctions** — 제재 명단. **Screening** — 명단 대조.
 
-## 리서치 · 재무제표
-
-- **Sector / theme (섹터/테마)** — 산업 분야(반도체 등) / 투자 주제(AI 등).
-- **competitive landscape (경쟁 구도)** — 시장에서 누가 경쟁하는지 지도.
-- **ideas shortlist (아이디어 숏리스트)** — 살펴볼 만한 종목을 추린 짧은 목록.
-- **Earnings call (실적 콜)** — 분기 실적 발표 후 경영진-애널리스트 컨퍼런스 콜.
-- **Filings (공시)** — 기업이 규제당국에 내는 공식 보고서 (미국 SEC, 예: 10-K 연차보고서).
-- **3-statement (3-스테이트먼트)** — 손익계산서·재무상태표·현금흐름표 3대 재무제표를 연결한 모델.
-- **live in Excel (엑셀에서 직접)** — 결과만 뱉지 않고 살아있는 수식으로 짜줌. 숫자 바꾸면 자동 재계산.
-
-## 펀드 어드민 · 회계 (백오피스)
-
-- **GL (General Ledger, 총계정원장)** — 회사의 메인 회계 장부. 모든 거래가 최종 기록되는 큰 장부. 요약본.
-- **Subledger (보조원장)** — GL 항목의 상세 내역 장부. (GL "주식 5만" ↔ Subledger "A주 3만 + B주 2만")
-- **Reconcile / 대사(對査)** — 두 장부를 나란히 놓고 숫자가 일치하는지 맞춰보는 것.
-- **Break (브레이크)** — 대사했을 때 안 맞는 차이. (예: 같은 거래인데 기록 날짜가 다름 → 타이밍 break)
-- **NAV (Net Asset Value, 순자산가치)** — 펀드의 자산-부채. LP한테 보고하는 핵심 숫자.
-- **Trial balance (시산표)** — 결산 전 모든 계정 잔액을 모아놓은 표.
-- **Accrual (발생주의/미지급비용)** — 아직 돈은 안 나갔지만 이미 발생한 비용을 미리 잡아두는 것.
-- **GP / LP** — General Partner(운용사) / Limited Partner(출자자). 펀드의 운용 주체와 돈 댄 투자자.
-
-## 온보딩 · 컴플라이언스 (KYC) — ★ 핀테크 도메인
-
-- **KYC (Know Your Customer, 고객확인)** — 신규 고객이 누구인지 신원·자금출처를 확인하는 절차.
-- **Onboarding (온보딩)** — 신규 고객을 등록·승인하는 전체 과정. KYC가 그 핵심 관문.
-- **AML (Anti-Money Laundering)** — 자금세탁방지. KYC가 AML의 첫 단추.
-- **UBO (Ultimate Beneficial Owner, 실소유자)** — 법인 뒤에 실제로 돈·지분을 소유한 사람. 법인 고객 KYC의 핵심.
-- **PEP (Politically Exposed Person)** — 고위 공직자 등 정치적 주요인물. 자금세탁 위험 높아 강화 심사 대상.
-- **Sanctions (제재 명단)** — 거래 금지 대상 리스트(국가/개인). 고객이 여기 있으면 거래 차단.
-- **Adverse media (부정적 언론)** — 고객 관련 부정 뉴스(범죄·사기 등) 스크리닝.
-- **Screening (스크리닝)** — 위 sanctions/PEP/adverse media 명단에 고객을 대조하는 것.
-
-## 기술 · 구조
-
-- **Reference (레퍼런스)** — 완제품 아님. 보고 배우고 변형하는 본보기.
-- **self-contained (자기완결형)** — 필요한 걸 자기 안에 다 품어서 따로 더 안 깔아도 됨.
-- **Cowork** — 앤트로픽 데스크톱/웹 작업 앱. 사람이 직접 대화하며 일함.
-- **Managed Agents API** — 서버에서 자동으로 에이전트 돌리는 API. `/v1/agents`로 배포.
-- **FSI** — Financial Services Industry (금융 서비스 산업).
-- **[UNSOURCED]** — 유료 데이터(CapIQ/FactSet 등) 없이 출처를 못 댄 숫자에 에이전트가 다는 표식. 환각으로 지어내는 대신 정직하게 비워둠.
+### 기술 · 구조
+- **Reference** — 완제품 아닌 본보기. **self-contained** — 자기 안에 다 품음.
+- **Cowork** — 앤트로픽 작업 앱. **Managed Agents API** — 서버 자동 실행(`/v1/agents`).
+- **[UNSOURCED]** — 출처 못 댄 숫자 표식. 지어내지 않고 정직하게 비움.
