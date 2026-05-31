@@ -37,7 +37,7 @@
 
 ## 온보딩 · 컴플라이언스 (KYC) — ★ 핀테크 도메인
 
-- **KYC (Know Your Customer, 고객확인)** — 신규 고객이 누구인지 신원·자금출처를 확인하는 절차. 핀테크/은행 필수 규제.
+- **KYC (Know Your Customer, 고객확인)** — 신규 고객이 누구인지 신원·자금출처를 확인하는 절차.
 - **Onboarding (온보딩)** — 신규 고객을 등록·승인하는 전체 과정. KYC가 그 핵심 관문.
 - **AML (Anti-Money Laundering)** — 자금세탁방지. KYC가 AML의 첫 단추.
 - **UBO (Ultimate Beneficial Owner, 실소유자)** — 법인 뒤에 실제로 돈·지분을 소유한 사람. 법인 고객 KYC의 핵심.
