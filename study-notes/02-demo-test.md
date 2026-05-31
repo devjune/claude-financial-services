@@ -5,9 +5,12 @@
 
 ## 난이도 매트릭스 (10개)
 
-> 기준(중요): **인터넷 O(웹검색 가능)**. 블로커는 **유료 벤더 MCP**(capiq/factset/daloopa/pitchbook 등 구독 필요)뿐. 회사 자체 시스템 MCP(internal-gl/crm/portfolio/nav)는 "샘플 파일 위조하면 됨". openpyxl/python-pptx는 pip로 설치.
->
-> 🟢 GREEN = 셋업 낮음, 웹/수동입력으로 작동 · 🟡 YELLOW = 되는데 파일 위조 필요 or 유료데이터 없으면 약해짐 · 🔴 RED = 유료/내부데이터 대량 없으면 무의미.
+기준:
+- **전제** — 인터넷 O(웹검색 가능).
+- **유일한 블로커** — 유료 벤더 MCP(capiq/factset/daloopa/pitchbook — 구독 필요).
+- **우회 가능** — 회사 자체 시스템 MCP(internal-gl/crm/portfolio/nav)는 샘플 파일로 대체, 출력 라이브러리는 `pip install openpyxl python-pptx`.
+
+등급: 🟢 GREEN = 셋업 낮음, 웹/수동입력으로 작동 · 🟡 YELLOW = 파일 위조 필요 or 유료데이터 없으면 약해짐 · 🔴 RED = 유료/내부데이터 대량 없으면 무의미.
 
 | # | 에이전트 | vertical | 등급 | 블로커 / 셋업 | 산출물 |
 |---|---|---|---|---|---|
@@ -44,7 +47,7 @@
 | **GL** | `demo/03-gl-reconciler/recon.py` | 5행 중 break 4개 (Timing/FX/Quantity/GL-only) 정확 분류 |
 | **DCF** | `demo/04-dcf-model-builder/build_dcf.py` + validate | validate **PASS**, live formula 83개, 주당 $46.15 / -7.7% |
 
-→ 입력·산출물 모두 `demo/`에 커밋됨. 발표에 그대로 사용.
+→ 입력·산출물 모두 `demo/`에 커밋됨(산출물 보관). **발표는 위 3개 라인업**(Researcher·KYC·DCF) 사용, GL은 백업. `demo/` 폴더 번호는 제작 순서일 뿐 발표 순서와 무관.
 
 ## 공통 함정 (운영 노트)
 

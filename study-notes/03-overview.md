@@ -4,7 +4,7 @@
 
 ## 핵심 컨셉: one source, two wrappers
 
-시스템 프롬프트 + 스킬을 한 번 작성 → 두 가지로 배포
+시스템 프롬프트 + 스킬을 한 번 작성 → 배포 2방식
 - **Cowork 플러그인** (`plugins/agent-plugins/`)
 - **Managed Agents API** (`managed-agent-cookbooks/`)
 
@@ -32,7 +32,7 @@ scripts/                  검증/동기화 (check.py, sync-agent-skills.py)
 ```
 vertical-plugins (스킬 원본)
    → 골라 묶어서 → agent-plugins (완성형 에이전트)
-   → 같은 소스로 → 2가지 배포
+   → 같은 소스로 → 배포 2방식
 ```
 
 - 스킬 원본은 `vertical-plugins/`에만. `agent-plugins/.../skills/`는 복사본.
@@ -83,7 +83,7 @@ vertical-plugins (스킬 원본)
 - **self-contained(자기완결형)** — 에이전트는 자기가 쓰는 스킬을 통째로 복사해 품음. 그래서 에이전트만 깔면 끝. (스킬 원본은 vertical, 에이전트엔 사본)
 - **starting points(출발점)** — 그대로 쓰는 완제품 아님. 프롬프트·스킬·커넥터를 회사 방식에 맞게 고쳐 쓰라는 것. 레포 전체를 관통하는 톤.
 
-> 용어 풀이는 [01-presentation.md](01-presentation.md#용어집-부록)로 일원화.
+> 용어 풀이는 [01-presentation.md](01-presentation.md) **부록 B — 용어집**으로 일원화.
 
 ## 다음에 볼 것
 

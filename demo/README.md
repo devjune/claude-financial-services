@@ -6,7 +6,7 @@
 
 전제: `pip install openpyxl python-pptx` (한 번). MS Office·API 키 불필요. (01만 인터넷 사용)
 
-추천 발표 순서: **00 원리 → 01 라이브 훅 → 02~04 통제된 산출물**
+발표 정규 3개: **01 Researcher(라이브 훅) → 02 KYC → 04 DCF**. 00(원리)은 도입 설명용, 03(GL)은 검증된 백업. 폴더 번호 = 제작 순서(발표 순서 아님).
 
 ## 0. Hello — `00-hello-xlsx/` (원리)
 
