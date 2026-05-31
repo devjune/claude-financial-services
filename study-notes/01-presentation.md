@@ -97,7 +97,18 @@ sequenceDiagram
 | **② KYC Screener** ★ | 신뢰 경계(6) + 승인 게이트(7) | untrusted 문서 → 룰엔진 → escalate(절대 자동승인 X) |
 | **③ Model Builder (DCF)** | 선언적 명세 → 산출물 생성(3) | 가정(시나리오) → 계산 체인 → 민감도, md+mermaid 리포트로 |
 
-> 데모는 도메인이 아니라 **패턴의 실증**으로 보여준다. (GL Reconciler = SSoT·승인게이트 백업)
+> 데모는 도메인이 아니라 **패턴의 실증**으로 보여준다. 데모는 전부 **레포의 실제 에이전트·스킬을 직접 호출**(재구현 X).
+
+### 3.1 에이전트별 설계 패턴 (4개)
+
+| 에이전트 (스킬) | 핵심 설계 패턴 | 스프링/원칙 |
+|---|---|---|
+| **Market Researcher**<br/>(sector-overview·competitive-analysis·idea-generation) | **순차 파이프라인**(스킬을 정해진 순서로 오케스트레이션) + 데이터 **Strategy/fallback**(MCP→웹→`[UNSOURCED]`) + **Template Method**(리포트 구조 고정, 데이터만 채움) | Pipeline · DIP |
+| **KYC Screener** ★<br/>(kyc-doc-parse·kyc-rules) | **2단 Pipe-and-Filter**(파싱=추출 → 룰=판정, 분리) + **신뢰 경계**(untrusted 문서를 데이터로만) + **외부화 룰엔진**(룰 그리드=결정 테이블, 하드코딩 X) + **승인 게이트**(점수·라우팅만, never-approve) | SRP · 입력검증 · Strategy(룰) · CQRS |
+| **GL Reconciler**<br/>(gl-recon·break-trace) | **집합 대사**(full-outer-join+톨러런스 분류) + **2단 탐지→진단**(gl-recon 찾기 → break-trace 원인) + **결정적 분류**(규칙 기반, 멱등) + **최소권한·사람승인**(No ledger posting; 원인은 가설) | Two-phase · 멱등성 · 최소권한 |
+| **Model Builder (DCF)**<br/>(dcf-model) | **입력↔로직 분리**(선언적 가정→파생 계산; 파란=입력/검정=수식) + **입력 SSoT**(Inputs 탭, 계산셀 하드코드 금지) + **검증 게이트**(validate_dcf: terminal<WACC·수식오류) + **빌더 격리**(fetch=data-puller / build=builder, MCP 없음) | DRY · 설정/코드 분리 · 테스트·assertion · 헥사고날 |
+
+> 4개를 관통하는 건 §2의 7패턴이다: 다 **스킬 조립 + 데이터 Strategy + 사람 승인 게이트**로 수렴.
 
 ## 4. 총평 + 우리 시스템 적용점
 
