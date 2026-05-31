@@ -43,7 +43,9 @@ claude -p "/demo-visualizer gl" && open study-demo/outputs/gl.md
 | **GL 대사** | [scenarios/gl-recon.md](scenarios/gl-recon.md) | 대사 파이프라인 + break 분류 (파이 차트) |
 | **DCF** | [scenarios/dcf.md](scenarios/dcf.md) | 선언적 가정 → 계산 체인 → 민감도 |
 
-> Market Researcher(라이브 리서치)는 시나리오 파일 없이 세션에서 직접 구동 — 발표 오프너.
+> **Market Researcher**(발표 오프너)는 시나리오 파일이 없다 — 웹검색으로 **라이브** 구동:
+> `/research 디지털결제` → `study-demo/outputs/research-*.md` 저장 → `open`.
+> 유일하게 **비결정적**(라이브 웹데이터). `.claude/commands/research.md`.
 
 ## 재현성 (라이브인데 항상 같게?)
 
