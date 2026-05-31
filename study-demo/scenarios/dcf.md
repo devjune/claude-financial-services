@@ -1,6 +1,6 @@
 # 시나리오: DCF 밸류에이션 — DEMO Corp
 
-> 입력 가정(전부 수동 입력 — 유료 시장데이터 불필요). `demo-visualizer` 스킬이 이걸 읽어 `outputs/dcf-valuation.md`를 만든다. 단위 $M.
+> 입력 가정(전부 수동 입력 — 유료 시장데이터 불필요). `demo-visualizer` 스킬이 이걸 읽어 마크다운+mermaid 리포트를 만든다. 단위 $M.
 
 ## 기준 입력
 

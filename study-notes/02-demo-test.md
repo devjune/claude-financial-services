@@ -38,15 +38,16 @@
 처음엔 파이썬(openpyxl/python-pptx)으로 Office 산출물을 흉내냈지만, 레포 취지(=스킬 스터디)에 맞게 **직접 Claude 스킬을 작성**하고 **마크다운+mermaid로 시각화**하도록 바꿨다. **파이썬·Office 의존성 0.**
 
 - 스킬: [`.claude/skills/demo-visualizer/SKILL.md`](../.claude/skills/demo-visualizer/SKILL.md) — 시나리오 → md+mermaid 리포트 (Excel 대체용)
-- 입력: `study-demo/scenarios/{kyc,gl-recon,dcf}.md`
-- 결과 예시: `study-demo/outputs/{kyc-screening,gl-recon,dcf-valuation}.md`
+- 슬래시: `.claude/commands/demo-visualizer.md` → `/demo-visualizer <kyc|gl|dcf|...>`
+- 입력: `study-demo/scenarios/{kyc,kyc-retail,gl-recon,dcf}.md`
+- 결과: **스킬로 라이브 생성** (커밋 안 함, `.gitignore`) — "스킬 돌리는 게 곧 데모"
 
-### 결과 (시나리오대로 산출 확인)
+### 기대 결과 (스킬이 시나리오대로 생성)
 
-| 데모 | 결과 | 시각화 |
+| 데모 | 기대 결과 | 시각화 |
 |---|---|---|
 | **KYC** ★ | risk=high, **escalate-EDD** (R2 RU·R3 PEP fail, R7 not-run) | 지분 그래프 + 룰 판정 흐름 |
 | **GL** | 5행 중 break 4개 (Timing/FX/Quantity/GL-only) | 대사 파이프라인 + 버킷 파이 |
 | **DCF** | 주당 **$46.15** vs $50 → **−7.7%**, terminal<WACC ✓ | 계산 체인 + 민감도 표 |
 
-> 마크다운+mermaid라 GitHub·Confluence에서 그대로 렌더. 검토 시엔 mermaid를 PNG로 뽑아 미리보기 가능.
+> 결과 mermaid는 GitHub·Confluence에서 자동 렌더. 재현성은 스킬의 결정성 계약에 기댄다(라이브라 발표 직전 한 번 돌려 확인 권장).

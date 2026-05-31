@@ -45,3 +45,6 @@ coverage/
 TASKS.md
 MEMORY.md
 .claude/worktrees/
+
+# 데모 결과는 스킬로 라이브 생성 — 커밋 안 함
+study-demo/outputs/

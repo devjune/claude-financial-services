@@ -6,55 +6,47 @@
 
 ## 구조
 
-스킬은 **프로젝트 스코프**로 설치되어 세션에서 바로 호출된다.
+소스는 **스킬 + 시나리오** 둘뿐. 결과는 스킬을 돌려 **라이브로 생성**한다(커밋 안 함 → `.gitignore`).
 
 ```
-.claude/skills/demo-visualizer/SKILL.md   ← 직접 작성한 Claude 스킬 (프로젝트 스코프)
-study-demo/
-├── scenarios/   ← 입력 (kyc.md · kyc-retail.md · gl-recon.md · dcf.md)
-└── outputs/     ← 스킬이 만든 골든 결과 (md+mermaid, Excel 대체용)
-    └── kyc-screening.md · kyc-retail.md · gl-recon.md · dcf-valuation.md
+.claude/skills/demo-visualizer/SKILL.md   ← 스킬 (프로젝트 스코프, 노하우)
+.claude/commands/demo-visualizer.md       ← /demo-visualizer 슬래시 커맨드 (래퍼)
+study-demo/scenarios/                       ← 입력 (kyc · kyc-retail · gl-recon · dcf)
+       └─ (결과는 스킬이 그때그때 생성)
 ```
 
-> 결과의 mermaid는 **GitHub·Confluence에서 자동 렌더**된다 (별도 도구 불필요).
+## 왜 이렇게 (파이썬 → 스킬, 라이브 중심)
 
-## 왜 이렇게 (파이썬 → 스킬)
+- 이 레포의 본질은 **"SKILL.md를 어떻게 쓰는가"**다. 파이썬으로 엑셀을 찍는 건 취지와 무관 → **스킬 작성 + 마크다운/mermaid 출력**으로.
+- 결과물을 미리 만들어 커밋하지 않는다. **스킬 돌리는 것 자체가 데모.** (소스 = 시나리오+스킬, 결과 = 매번 재생성)
+- 마크다운+mermaid는 **GitHub·Confluence에서 그대로 렌더** — 파이썬·Office 불필요.
 
-- 이 레포의 본질은 **"SKILL.md를 어떻게 쓰는가"**다. 파이썬으로 openpyxl 엑셀을 찍는 건
-  레포 취지와 무관 — 그래서 **스킬 작성 + 마크다운/mermaid 출력**으로 바꿨다.
-- 마크다운+mermaid는 **GitHub·Confluence에서 그대로 렌더**되고 파이썬·Office가 필요 없다.
+## 돌려보는 법
 
-## 돌려보는 법 (라이브)
-
-가장 간단 — **슬래시 커맨드** (`.claude/commands/demo-visualizer.md`):
+**라이브(발표용)** — 대화형 세션에서 슬래시 커맨드:
 
 ```
-/demo-visualizer gl       # gl-recon 시나리오 시각화 (kyc | kyc-retail | gl | dcf)
+/demo-visualizer gl        # kyc | kyc-retail | gl | dcf
 ```
 
+**헤드리스(검증용)** — 슬래시는 헤드리스에서 확장 안 되므로 인라인 프롬프트:
 
-Claude 세션(Cowork/Claude Code)에서 `demo-visualizer` 스킬을 깔고:
-
+```bash
+claude -p ".claude/skills/demo-visualizer/SKILL.md 스킬대로 study-demo/scenarios/gl-recon.md 를 시각화한 마크다운만 출력."
 ```
-demo-visualizer 스킬로 scenarios/kyc.md 를 시각화해줘.
-```
 
-→ Claude가 스킬을 따라 `outputs/kyc-screening.md` 같은 리포트를 만든다.
-
-### 멱등성 (발표·리뷰용) ★
-
-`outputs/`의 파일들은 검토·커밋된 **골든(고정) 결과**다. **발표는 라이브 재생성이 아니라 이 커밋된 파일을 그대로 쓴다** → 항상 동일.
-
-- 골든이 진실: 재생성 시 스킬은 골든 파일을 **그대로 재현**(섹션·수치·다이어그램까지). 다르면 골든이 이긴다.
-- 숫자는 규칙대로 **결정적**(DCF·GL분류·룰판정 모두 deterministic)이라, 변동 여지는 문장 표현뿐 — 스킬의 "결정성 계약"이 그것까지 억제.
-- LLM은 바이트 단위로 결정적이진 않으므로, **보장은 "골든 파일 + 빡빡한 스킬"** 조합에서 나온다.
+> 결과 mermaid는 GitHub/Confluence에서 자동 렌더. 결과를 파일로 남기고 싶으면 `> study-demo/outputs/gl.md` 로 저장(gitignore됨).
 
 ## 데모 3종 (발표 라인업)
 
-| 시나리오 | 결과 | 보여주는 것 |
+| 시나리오 | 입력 | 보여주는 것 |
 |---|---|---|
-| **KYC** ★ | [kyc-screening.md](outputs/kyc-screening.md) | 신뢰경계 + 룰 판정 + 승인 게이트 (지분 그래프·판정 흐름) |
-| **GL 대사** | [gl-recon.md](outputs/gl-recon.md) | 대사 파이프라인 + break 분류 (파이 차트) |
-| **DCF** | [dcf-valuation.md](outputs/dcf-valuation.md) | 선언적 가정 → 계산 체인 → 민감도 |
+| **KYC** ★ | [scenarios/kyc.md](scenarios/kyc.md) | 신뢰경계 + 룰 판정 + 승인 게이트 (지분 그래프·판정 흐름) |
+| **GL 대사** | [scenarios/gl-recon.md](scenarios/gl-recon.md) | 대사 파이프라인 + break 분류 (파이 차트) |
+| **DCF** | [scenarios/dcf.md](scenarios/dcf.md) | 선언적 가정 → 계산 체인 → 민감도 |
 
-> Market Researcher(라이브 리서치)는 시나리오 파일이 아니라 세션에서 직접 구동 — 발표 오프너.
+> Market Researcher(라이브 리서치)는 시나리오 파일 없이 세션에서 직접 구동 — 발표 오프너.
+
+## 재현성 (라이브인데 항상 같게?)
+
+결과를 커밋하지 않으니 "항상 동일"은 **스킬의 결정성 계약**에 기댄다: 섹션·표·다이어그램 구조 고정 + 숫자는 규칙으로만 결정적 도출(DCF·GL분류·룰판정 모두 deterministic). 변동 여지는 문장 표현뿐. 단, **LLM은 바이트 단위로 결정적이진 않다** — 발표 직전 한 번 돌려 확인하고 그 화면을 쓰면 안전.
