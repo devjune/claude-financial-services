@@ -26,6 +26,13 @@ study-demo/
 
 ## 돌려보는 법 (라이브)
 
+가장 간단 — **슬래시 커맨드** (`.claude/commands/demo-visualizer.md`):
+
+```
+/demo-visualizer gl       # gl-recon 시나리오 시각화 (kyc | kyc-retail | gl | dcf)
+```
+
+
 Claude 세션(Cowork/Claude Code)에서 `demo-visualizer` 스킬을 깔고:
 
 ```
